@@ -12,14 +12,23 @@ int main (int argc, const char * argv[]) {
   CGEventFlags oldFlags = CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState);
 
   CGEventMask eventMask = (CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged));
-  CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, eventMask, myCGEventCallback, &oldFlags);
+  CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, 
+                                            kCGHeadInsertEventTap,
+                                            0, 
+                                            eventMask,
+                                            myCGEventCallback,
+                                            &oldFlags);
   
   if (!eventTap) {
-    fprintf(stderr, "failed to create event tap\nyou need to enable \"Enable access for assitive devices\" in Universal Access preference panel.");
+    fprintf(stderr, "failed to create event tap\nyou need to enable 
+                    \"Enable access for assitive devices\" in Universal Access
+                     preference panel.");
     exit(1);
   }
   
-  CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+  CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, 
+                                                                   eventTap,
+                                                                   0);
   CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
   CGEventTapEnable(eventTap, true);
   
@@ -30,7 +39,11 @@ int main (int argc, const char * argv[]) {
 }
 
 
-CGEventRef myCGEventCallback (CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
+CGEventRef myCGEventCallback (CGEventTapProxy proxy, 
+                              CGEventType type,
+                              CGEventRef event,
+                              void *refcon) {
+
   if ((type != kCGEventKeyDown) && (type != kCGEventFlagsChanged)) {
     return event;
   }
